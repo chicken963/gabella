@@ -1,0 +1,104 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_matches_table" author="a.andreychuk@andersenlab.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="matches"/>
+            </not>
+        </preConditions>
+        <createTable tableName="matches">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="server_id" type="UUID">
+                <constraints foreignKeyName="server_to_match_fk" nullable="false"/>
+            </column>
+            <column name="started_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finished_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_players_table" author="a.andreychuk@andersenlab.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="players"/>
+            </not>
+        </preConditions>
+        <createTable tableName="players">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="nick" type="VARCHAR">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="registered_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_matches" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="won_matches" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_servers_table" author="a.andreychuk@andersenlab.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="servers"/>
+            </not>
+        </preConditions>
+        <createTable tableName="servers">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_matches_to_players_mapping" author="a.andreychuk@andersenlab.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="matches_players"/>
+            </not>
+        </preConditions>
+        <createTable tableName="matches_players">
+            <column name="match_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="player_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_matches_to_winners_mapping" author="a.andreychuk@andersenlab.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="matches_winners"/>
+            </not>
+        </preConditions>
+        <createTable tableName="matches_winners">
+            <column name="match_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="winner_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

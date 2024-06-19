@@ -25,7 +25,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Player findPlayerByNick(String nick) {
         return playerRepository.findByNick(nick)
                 .orElseGet(() -> {
-                    log.info("Player {} was not tracked before - saving him for the first time", nick);
+                    log.info("Player {} was not tracked before - if match data is provided correctly, player will be saved for further tracking", nick);
                     return generateNewPlayer(nick);
                 });
     }
@@ -35,6 +35,7 @@ public class PlayerServiceImpl implements PlayerService {
         Set<Player> participants = match.getParticipants();
         participants.forEach(participant ->
                 participant.setTotalMatches(participant.getTotalMatches() + 1));
+        log.info("Updating play statistics for players {}", getPlayersNicknames(participants));
         return new HashSet<>(playerRepository.saveAll(participants));
     }
 
@@ -45,6 +46,7 @@ public class PlayerServiceImpl implements PlayerService {
                     winner.setPoints(winner.getPoints() + (int) Math.floor(Math.random() * 15));
                 }
                 );
+        log.info("Updating win statistics for players {}", getPlayersNicknames(winners));
         return new HashSet<>(playerRepository.saveAll(winners));
     }
 
@@ -138,6 +140,12 @@ public class PlayerServiceImpl implements PlayerService {
         return match.getParticipants().stream()
                 .filter(participant -> match.getWinners().contains(player) != match.getWinners().contains(participant))
                 .collect(Collectors.toSet());
+    }
+
+    private String getPlayersNicknames(Set<Player> winners) {
+        return winners.stream()
+                .map(Player::getNick)
+                .collect(Collectors.joining(", "));
     }
 
     @FunctionalInterface

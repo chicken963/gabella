@@ -16,6 +16,5 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "${spring.kafka.topic-name}", groupId = "${spring.kafka.group-id}")
     public void listen(MatchDto matchDto) {
         matchService.saveResult(matchDto);
-        log.info("Saved new match to statistics");
     }
 }

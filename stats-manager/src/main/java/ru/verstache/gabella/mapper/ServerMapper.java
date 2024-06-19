@@ -12,8 +12,8 @@ public abstract class ServerMapper {
     @Autowired
     private ServerService serverService;
 
-    ServerDto toDto(Server server) {
-        return new ServerDto(server.getName());
+    public ServerDto toDto(Server server) {
+        return new ServerDto(server.getId(), server.getName(), server.getCreatedAt());
     }
 
     Server toModel(ServerDto dto) {

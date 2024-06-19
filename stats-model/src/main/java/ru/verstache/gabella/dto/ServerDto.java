@@ -1,4 +1,7 @@
 package ru.verstache.gabella.dto;
 
-public record ServerDto(String name) {
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record ServerDto(UUID id, String name, LocalDateTime createdAt) {
 }

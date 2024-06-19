@@ -12,7 +12,7 @@ public abstract class PlayerMapper {
     @Autowired
     private PlayerService playerService;
 
-    PlayerDto toDto(Player player) {
+    public PlayerDto toDto(Player player) {
         return new PlayerDto(player.getNick());
     }
 

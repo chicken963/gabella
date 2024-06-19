@@ -40,6 +40,6 @@ public class MatchServiceImpl implements MatchService {
 
 
     private boolean isDuplicated(Match match) {
-        return !matchRepository.findAllByServerAndFinishedAtAndStartedAt(match.getServer(), match.getStartedAt(), match.getFinishedAt()).isEmpty();
+        return !matchRepository.findAllByServerAndStartedAtAndFinishedAt(match.getServer(), match.getStartedAt(), match.getFinishedAt()).isEmpty();
     }
 }

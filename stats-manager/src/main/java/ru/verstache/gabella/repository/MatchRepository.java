@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface MatchRepository extends JpaRepository<Match, UUID> {
 
-    Collection<Match> findAllByServerAndFinishedAtAndStartedAt(Server server, LocalDateTime startedAt, LocalDateTime finishedAt);
+    Collection<Match> findAllByServerAndStartedAtAndFinishedAt(Server server, LocalDateTime startedAt, LocalDateTime finishedAt);
 
     Integer countMatchByServer(Server server);
 

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import ru.verstache.gabella.dto.PlayerDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,5 +16,6 @@ public class ServerStats {
     private int totalPlayedMatches;
     private double averageMatchesPerDay;
     private double maxMatchesPerDay;
+    private LocalDate mostPlayedDay;
     private PlayerDto bestPlayer;
 }

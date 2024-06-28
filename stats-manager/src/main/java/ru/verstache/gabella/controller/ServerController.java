@@ -30,4 +30,9 @@ public class ServerController {
     public ResponseEntity<ServerStats> getServerStats(@PathVariable("id") UUID serverId) {
         return ResponseEntity.ok(serverService.getServersStats(serverId));
     }
+
+    @GetMapping("/{id}/info")
+    public ResponseEntity<ServerDto> getServerInfo(@PathVariable("id") UUID serverId) {
+        return ResponseEntity.ok(serverService.findById(serverId));
+    }
 }

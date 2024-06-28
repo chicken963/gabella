@@ -13,8 +13,10 @@ import ru.verstache.gabella.model.Server;
 import ru.verstache.gabella.model.stats.ServerStats;
 import ru.verstache.gabella.repository.MatchRepository;
 import ru.verstache.gabella.repository.ServerRepository;
+import ru.verstache.gabella.service.MatchWinnerService;
 import ru.verstache.gabella.service.ServerService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -28,6 +30,7 @@ public class ServerServiceImpl implements ServerService {
     private final ServerMapper serverMapper;
     private final MatchRepository matchRepository;
     private final PlayerMapper playerMapper;
+    private final MatchWinnerService matchWinnerService;
 
     @Override
     public Server findByName(String serverName) {
@@ -51,14 +54,56 @@ public class ServerServiceImpl implements ServerService {
                 .name(server.getName())
                 .createdAt(server.getCreatedAt())
                 .totalPlayedMatches(matchRepository.countMatchByServer(server))
+                .averageMatchesPerDay(getAverageMatchesPerDay(server))
+                .maxMatchesPerDay(getMaxMatchesPerDay(server))
+                .mostPlayedDay(getMostPlayedDay(server))
                 .bestPlayer(findBestPlayer(server))
                 .build();
+    }
+
+    @Override
+    public ServerDto findById(UUID serverId) {
+        return serverRepository.findById(serverId)
+                .map(serverMapper::toDto)
+                .orElseThrow(() -> new ItemNotFoundException("No server found by id " + serverId));
+    }
+
+    private double getAverageMatchesPerDay(Server server) {
+       return matchRepository.findAllByServer(server)
+                .stream()
+                .collect(Collectors.groupingBy(match -> match.getFinishedAt().toLocalDate(), Collectors.counting()))
+                .values().stream()
+                .collect(Collectors.summarizingInt(Long::intValue))
+                .getAverage();
+    }
+
+    private double getMaxMatchesPerDay(Server server) {
+        return matchRepository.findAllByServer(server)
+                .stream()
+                .collect(Collectors.groupingBy(match -> match.getFinishedAt().toLocalDate(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .map(Map.Entry::getValue)
+                .map(Double::valueOf)
+                .findFirst()
+                .orElse(0d);
+    }
+
+    private LocalDate getMostPlayedDay(Server server) {
+        return matchRepository.findAllByServer(server)
+                .stream()
+                .collect(Collectors.groupingBy(match -> match.getFinishedAt().toLocalDate(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(LocalDate.of(1, 1, 1));
     }
 
     private PlayerDto findBestPlayer(Server server) {
         return matchRepository.findAllByServer(server)
                 .stream()
-                .map(Match::getWinners)
+                .map(matchWinnerService::getWinners)
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet().stream()

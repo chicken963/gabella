@@ -4,6 +4,7 @@ import ru.verstache.gabella.dto.ServerDto;
 import ru.verstache.gabella.model.Server;
 import ru.verstache.gabella.model.stats.ServerStats;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,4 +16,6 @@ public interface ServerService {
     ServerStats getServersStats(UUID serverId);
 
     ServerDto findById(UUID serverId);
+
+    List<ServerDto> findMostPopularServers(Integer amount);
 }

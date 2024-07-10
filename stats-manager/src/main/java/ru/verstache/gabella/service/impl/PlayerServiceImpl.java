@@ -2,7 +2,10 @@ package ru.verstache.gabella.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.verstache.gabella.dto.PlayerDto;
+import ru.verstache.gabella.mapper.PlayerMapper;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
 import ru.verstache.gabella.model.Player;
@@ -11,10 +14,11 @@ import ru.verstache.gabella.repository.PlayerRepository;
 import ru.verstache.gabella.service.MatchWinnerService;
 import ru.verstache.gabella.service.PlayerService;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static utils.PlayerUtils.generateNewPlayer;
 
 @Slf4j
 @Service
@@ -23,6 +27,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
     private final MatchWinnerService matchWinnerService;
+    private final PlayerMapper playerMapper;
 
     @Override
     public Player findPlayerByNick(String nick) {
@@ -110,6 +115,14 @@ public class PlayerServiceImpl implements PlayerService {
                 .build();
     }
 
+    @Override
+    public List<PlayerDto> findTopPlayers(Integer amount) {
+        PageRequest pageRequest = PageRequest.of(0, amount);
+        return playerRepository.findTopPlayers(pageRequest).stream()
+                .map(playerMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     private String getMostOftenTeammate(Player player) {
         return getMostOftenPlayers(player, this::getTeammates);
     }
@@ -130,17 +143,6 @@ public class PlayerServiceImpl implements PlayerService {
                 .map(Player::getNick)
                 .findFirst()
                 .orElse(null);
-    }
-
-    private Player generateNewPlayer(String nick) {
-        return Player.builder()
-                .id(UUID.randomUUID())
-                .nick(nick)
-                .registeredAt(LocalDateTime.now())
-                .totalMatches(0)
-                .wonMatches(0)
-                .points(0)
-                .build();
     }
 
     private Set<Player> getTeammates(Match match, Player player) {

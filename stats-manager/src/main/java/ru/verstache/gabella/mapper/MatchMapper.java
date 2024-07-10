@@ -1,15 +1,12 @@
 package ru.verstache.gabella.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.verstache.gabella.dto.MatchDto;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
 import ru.verstache.gabella.model.MatchWinnerId;
-import ru.verstache.gabella.model.Player;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,6 +18,9 @@ public abstract class MatchMapper {
 
     @Autowired
     private PlayerMapper playerMapper;
+
+    @Autowired
+    private WinnerMapper winnerMapper;
 
 
     public Match toModel(MatchDto matchDto) {
@@ -41,10 +41,19 @@ public abstract class MatchMapper {
                     .filter(pl -> pl.getNick().equals(winner.nick()))
                     .findFirst()
                     .orElse(null));
-//            matchWinner.setId(generateMatchWinnerId(matchWinner));
             return matchWinner;
         }).collect(Collectors.toSet()));
         return match;
+    }
+
+    public MatchDto toDto(Match match) {
+        return new MatchDto(
+                serverMapper.toDto(match.getServer()),
+                match.getStartedAt(),
+                match.getFinishedAt(),
+                match.getParticipants().stream().map(playerMapper::toDto).collect(Collectors.toSet()),
+                match.getMatchWinners().stream().map(winnerMapper::toDto).collect(Collectors.toSet())
+        );
     }
 
     public MatchWinnerId generateMatchWinnerId(MatchWinner matchWinner) {

@@ -2,21 +2,21 @@ package ru.verstache.gabella.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.verstache.gabella.dto.MatchDto;
 import ru.verstache.gabella.mapper.MatchMapper;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
-import ru.verstache.gabella.model.MatchWinnerId;
 import ru.verstache.gabella.model.Player;
 import ru.verstache.gabella.repository.MatchRepository;
 import ru.verstache.gabella.repository.MatchWinnerRepository;
 import ru.verstache.gabella.service.MatchService;
 import ru.verstache.gabella.service.PlayerService;
 
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -58,6 +58,14 @@ public class MatchServiceImpl implements MatchService {
         return match.getMatchWinners().stream()
                 .map(MatchWinner::getWinner)
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<MatchDto> findLastMatches(Integer amount) {
+        PageRequest pageRequest = PageRequest.of(0, amount);
+        return matchRepository.findLastFinished(pageRequest).stream()
+                .map(matchMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 

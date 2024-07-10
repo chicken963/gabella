@@ -1,6 +1,7 @@
 package ru.verstache.gabella.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.verstache.gabella.dto.PlayerDto;
 import ru.verstache.gabella.dto.ServerDto;
@@ -8,7 +9,6 @@ import ru.verstache.gabella.exception.ItemNotFoundException;
 import ru.verstache.gabella.mapper.PlayerMapper;
 import ru.verstache.gabella.mapper.ServerMapper;
 import ru.verstache.gabella.model.Match;
-import ru.verstache.gabella.model.Player;
 import ru.verstache.gabella.model.Server;
 import ru.verstache.gabella.model.stats.ServerStats;
 import ru.verstache.gabella.repository.MatchRepository;
@@ -74,6 +74,14 @@ public class ServerServiceImpl implements ServerService {
         return serverRepository.findById(serverId)
                 .map(serverMapper::toDto)
                 .orElseThrow(() -> new ItemNotFoundException("No server found by id " + serverId));
+    }
+
+    @Override
+    public List<ServerDto> findMostPopularServers(Integer amount) {
+        PageRequest pageRequest = PageRequest.of(0, amount);
+        return matchRepository.findMostPopularServers(pageRequest).stream()
+                .map(serverMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     private double getAverageMatchesPerDay(Server server) {

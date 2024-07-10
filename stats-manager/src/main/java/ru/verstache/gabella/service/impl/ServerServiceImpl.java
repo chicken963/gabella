@@ -53,12 +53,20 @@ public class ServerServiceImpl implements ServerService {
         return ServerStats.builder()
                 .name(server.getName())
                 .createdAt(server.getCreatedAt())
+                .lastPlayedAt(findLastPlayedTime(server))
                 .totalPlayedMatches(matchRepository.countMatchByServer(server))
                 .averageMatchesPerDay(getAverageMatchesPerDay(server))
                 .maxMatchesPerDay(getMaxMatchesPerDay(server))
                 .mostPlayedDay(getMostPlayedDay(server))
                 .bestPlayer(findBestPlayer(server))
                 .build();
+    }
+
+    private LocalDateTime findLastPlayedTime(Server server) {
+        return matchRepository.findAllByServer(server).stream()
+                .map(Match::getFinishedAt)
+                .max(Comparator.comparing(LocalDateTime::toLocalTime))
+                .orElse(LocalDateTime.of(1, 1, 1, 0, 0));
     }
 
     @Override

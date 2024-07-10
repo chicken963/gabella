@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="add_points_for_winners" author="a.andreychuk@andersenlab.com">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="matches_winners"/>
+        </preConditions>
+        <addColumn tableName="matches_winners">
+            <column name="points" type="NUMERIC">
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

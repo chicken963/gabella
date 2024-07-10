@@ -7,5 +7,5 @@ public record MatchDto(ServerDto server,
                        LocalDateTime startedAt,
                        LocalDateTime finishedAt,
                        Set<PlayerDto> participants,
-                       Set<PlayerDto> winners) {
+                       Set<WinnerDto> winners) {
 }

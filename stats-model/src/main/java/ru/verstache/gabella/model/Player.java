@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name="nick", nullable=false)
+    @Column(nullable=false)
     private String nick;
 
     @Column(name="registered_at", nullable=false)
@@ -31,6 +32,10 @@ public class Player {
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "participants", fetch = FetchType.EAGER)
     private Set<Match> matches;
+
+    @OneToMany(mappedBy = "winner")
+    @EqualsAndHashCode.Exclude
+    private Set<MatchWinner> matchWinners = new HashSet<>();
 
     @Column(name="total_matches", nullable=false)
     private Integer totalMatches;

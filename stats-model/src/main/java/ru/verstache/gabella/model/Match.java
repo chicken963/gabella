@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class Match {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
@@ -43,12 +42,8 @@ public class Match {
     )
     private Set<Player> participants;
 
-    @ManyToMany
-    @JoinTable(
-            name = "matches_winners",
-            joinColumns = @JoinColumn(name = "match_id"),
-            inverseJoinColumns = @JoinColumn(name = "winner_id")
-    )
-    private Set<Player> winners;
+    @OneToMany(mappedBy = "match")
+    @EqualsAndHashCode.Exclude
+    private Set<MatchWinner> matchWinners = new HashSet<>();
 
 }

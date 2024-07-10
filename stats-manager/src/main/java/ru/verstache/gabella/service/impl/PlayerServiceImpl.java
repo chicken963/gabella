@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.verstache.gabella.model.Match;
+import ru.verstache.gabella.model.MatchWinner;
 import ru.verstache.gabella.model.Player;
 import ru.verstache.gabella.model.stats.PlayerStats;
 import ru.verstache.gabella.repository.PlayerRepository;
+import ru.verstache.gabella.service.MatchWinnerService;
 import ru.verstache.gabella.service.PlayerService;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final MatchWinnerService matchWinnerService;
 
     @Override
     public Player findPlayerByNick(String nick) {
@@ -40,24 +43,34 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Set<Player> increaseStatsForWinners(Set<Player> winners) {
-        winners.forEach(winner -> {
+    public void increaseStatsForWinners(Match match) {
+        Set<Player> winnersFromDb = match.getParticipants().stream().filter(
+                participant -> match.getMatchWinners().stream()
+                        .map(MatchWinner::getWinner)
+                        .map(Player::getNick)
+                        .collect(Collectors.toSet())
+                .contains(participant.getNick())
+        ).collect(Collectors.toSet());
+
+        winnersFromDb.forEach(winner -> {
                     winner.setWonMatches(winner.getWonMatches() + 1);
-                    winner.setPoints(winner.getPoints() + (int) Math.floor(Math.random() * 15));
+                    winner.setPoints(winner.getPoints() + match.getMatchWinners().stream()
+                            .filter(matchWinner -> matchWinner.getWinner().equals(winner))
+                            .findFirst()
+                            .map(MatchWinner::getPoints)
+                            .orElse(0));
                 }
                 );
-        log.info("Updating win statistics for players {}", getPlayersNicknames(winners));
-        return new HashSet<>(playerRepository.saveAll(winners));
+        log.info("Updating win statistics for players {}", getPlayersNicknames(winnersFromDb));
+        playerRepository.saveAll(winnersFromDb);
     }
 
     @Override
     public Set<Player> extractWinners(Match match, Set<Player> participants) {
-        Set<Player> winners = participants.stream()
-                .filter(participant -> match.getWinners().stream()
+        return participants.stream()
+                .filter(participant -> matchWinnerService.getWinners(match).stream()
                         .anyMatch(winner -> winner.getNick().equals(participant.getNick())))
                 .collect(Collectors.toSet());
-        match.setWinners(winners);
-        return winners;
     }
 
     @Override
@@ -70,7 +83,7 @@ public class PlayerServiceImpl implements PlayerService {
         int longestStreak = 0;
         int currentStreak = 0;
         for (Match match : matches) {
-            if (match.getWinners().stream().anyMatch(winner -> winner.getNick().equals(player.getNick()))) {
+            if (matchWinnerService.getWinners(match).stream().anyMatch(winner -> winner.getNick().equals(player.getNick()))) {
                 currentStreak++;
             } else {
                 if (currentStreak > longestStreak) {
@@ -131,14 +144,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private Set<Player> getTeammates(Match match, Player player) {
+        Set<Player> winners = matchWinnerService.getWinners(match);
         return match.getParticipants().stream()
-                .filter(participant -> match.getWinners().contains(player) == match.getWinners().contains(participant))
+                .filter(participant -> winners.contains(player) == winners.contains(participant))
+                .filter(participant -> participant != player)
                 .collect(Collectors.toSet());
     }
 
     private Set<Player> getEnemies(Match match, Player player) {
+        Set<Player> winners = matchWinnerService.getWinners(match);
         return match.getParticipants().stream()
-                .filter(participant -> match.getWinners().contains(player) != match.getWinners().contains(participant))
+                .filter(participant -> winners.contains(player) != winners.contains(participant))
                 .collect(Collectors.toSet());
     }
 

@@ -4,6 +4,7 @@ import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.Player;
 import ru.verstache.gabella.model.stats.PlayerStats;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface PlayerService {
@@ -12,7 +13,7 @@ public interface PlayerService {
 
     Set<Player> increaseStatsForParticipants(Match match);
 
-    Set<Player> increaseStatsForWinners(Set<Player> winners);
+    void increaseStatsForWinners(Match match);
 
     Set<Player> extractWinners(Match match, Set<Player> participants);
 

@@ -42,7 +42,7 @@ public class Match {
     )
     private Set<Player> participants;
 
-    @OneToMany(mappedBy = "match")
+    @OneToMany(mappedBy = "match", fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     private Set<MatchWinner> matchWinners = new HashSet<>();
 

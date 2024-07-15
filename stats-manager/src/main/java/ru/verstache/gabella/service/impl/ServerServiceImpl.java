@@ -93,16 +93,16 @@ public class ServerServiceImpl implements ServerService {
                 .getAverage();
     }
 
-    private double getMaxMatchesPerDay(Server server) {
+    private int getMaxMatchesPerDay(Server server) {
         return matchRepository.findAllByServer(server)
                 .stream()
                 .collect(Collectors.groupingBy(match -> match.getFinishedAt().toLocalDate(), Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .map(Map.Entry::getValue)
-                .map(Double::valueOf)
+                .map(Long::intValue)
                 .findFirst()
-                .orElse(0d);
+                .orElse(0);
     }
 
     private LocalDate getMostPlayedDay(Server server) {

@@ -71,14 +71,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Set<Player> extractWinners(Match match, Set<Player> participants) {
-        return participants.stream()
-                .filter(participant -> matchWinnerService.getWinners(match).stream()
-                        .anyMatch(winner -> winner.getNick().equals(participant.getNick())))
-                .collect(Collectors.toSet());
-    }
-
-    @Override
     public int getLongestWinStreak(Player player) {
         List<Match> matches = new ArrayList<>(
                 Optional.ofNullable(player.getMatches())

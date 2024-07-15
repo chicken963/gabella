@@ -54,13 +54,6 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Set<Player> getWinners(Match match) {
-        return match.getMatchWinners().stream()
-                .map(MatchWinner::getWinner)
-                .collect(Collectors.toSet());
-    }
-
-    @Override
     public List<MatchDto> findLastMatches(Integer amount) {
         PageRequest pageRequest = PageRequest.of(0, amount);
         return matchRepository.findLastFinished(pageRequest).stream()

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="prefill_servers" author="a.andreychuk@andersenlab.com" context="test">
+        <insert tableName="servers">
+            <column name="id" value="78de6864-36e9-4563-88e5-a7fef2e07cec"/>
+            <column name="name" value="rush_a"/>
+            <column name="created_at" value="2024-06-28 19:45:33.514671"/>
+        </insert>
+        <insert tableName="servers">
+            <column name="id" value="db7b1d54-ff13-48d0-b6c7-06ba5507a305"/>
+            <column name="name" value="rush_b"/>
+            <column name="created_at" value="2024-06-28 19:46:33.514582"/>
+        </insert>
+        <insert tableName="servers">
+            <column name="id" value="387fad9a-f121-8a3c-7cbb-17bcfd2391d6"/>
+            <column name="name" value="rush_c"/>
+            <column name="created_at" value="2024-06-28 19:47:33.514582"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="prefill_matches" author="a.andreychuk@andersenlab.com" context="test">
+        <insert tableName="matches">
+            <column name="id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="server_id" value="78de6864-36e9-4563-88e5-a7fef2e07cec"/>
+            <column name="started_at" value="2024-06-17 16:16:13.379000"/>
+            <column name="finished_at" value="2024-06-17 16:39:13.379000"/>
+        </insert>
+        <insert tableName="matches">
+            <column name="id" value="da7540aa-50a0-41bb-bd74-a39b1ee88704"/>
+            <column name="server_id" value="db7b1d54-ff13-48d0-b6c7-06ba5507a305"/>
+            <column name="started_at" value="2024-06-27 19:16:13.379000"/>
+            <column name="finished_at" value="2024-06-27 21:39:21.311000"/>
+        </insert>
+        <insert tableName="matches">
+            <column name="id" value="3e11f4a1-1405-4a90-9ce6-f600b1f459ca"/>
+            <column name="server_id" value="db7b1d54-ff13-48d0-b6c7-06ba5507a305"/>
+            <column name="started_at" value="2024-06-24 11:52:08.146000"/>
+            <column name="finished_at" value="2024-06-24 12:33:42.954000"/>
+        </insert>
+        <insert tableName="matches">
+            <column name="id" value="1d7d7fff-d0da-46e8-a617-20bf4888e640"/>
+            <column name="server_id" value="db7b1d54-ff13-48d0-b6c7-06ba5507a305"/>
+            <column name="started_at" value="2024-07-05 20:02:53.552000"/>
+            <column name="finished_at" value="2024-06-24 22:12:41.435000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="prefill_players" author="a.andreychuk@andersenlab.com" context="test">
+        <insert tableName="players">
+            <column name="id" value="f84b1f9f-9298-492a-8b16-f3ed271efe9c"/>
+            <column name="nick" value="Matt"/>
+            <column name="registered_at" value="2024-06-28 19:45:33.569283"/>
+            <column name="total_matches" value="1"/>
+            <column name="won_matches" value="0"/>
+            <column name="points" value="0"/>
+        </insert>
+        <insert tableName="players">
+            <column name="id" value="e216a701-cafe-4497-8f36-275247102b1c"/>
+            <column name="nick" value="Anya"/>
+            <column name="registered_at" value="2024-06-28 19:45:33.575871"/>
+            <column name="total_matches" value="1"/>
+            <column name="won_matches" value="1"/>
+            <column name="points" value="7"/>
+        </insert>
+        <insert tableName="players">
+            <column name="id" value="7d4a769a-9976-4e69-a2c5-50e3c20085f1"/>
+            <column name="nick" value="Innha"/>
+            <column name="registered_at" value="2024-06-28 19:45:33.574320"/>
+            <column name="total_matches" value="1"/>
+            <column name="won_matches" value="1"/>
+            <column name="points" value="10"/>
+        </insert>
+        <insert tableName="players">
+            <column name="id" value="cba1a328-7ab0-4724-9903-8b65b15c72d3"/>
+            <column name="nick" value="Alexander"/>
+            <column name="registered_at" value="2024-06-28 19:45:33.571469"/>
+            <column name="total_matches" value="1"/>
+            <column name="won_matches" value="0"/>
+            <column name="points" value="0"/>
+        </insert>
+        <insert tableName="players">
+            <column name="id" value="63bc807c-96ad-4d65-aae5-a657663afa14"/>
+            <column name="nick" value="Morty"/>
+            <column name="registered_at" value="2024-07-08 11:09:23.707918"/>
+            <column name="total_matches" value="3"/>
+            <column name="won_matches" value="2"/>
+            <column name="points" value="20"/>
+        </insert>
+        <insert tableName="players">
+            <column name="id" value="d02230f2-dba5-42f3-9280-bc148b63fd6d"/>
+            <column name="nick" value="Martin"/>
+            <column name="registered_at" value="2024-07-10 14:52:48.659579"/>
+            <column name="total_matches" value="0"/>
+            <column name="won_matches" value="0"/>
+            <column name="points" value="0"/>
+        </insert>
+        <insert tableName="players">
+            <column name="id" value="d8eead27-ac5c-45e4-a9d4-12d1ef323cd6"/>
+            <column name="nick" value="Nick"/>
+            <column name="registered_at" value="2024-07-08 11:09:23.710917"/>
+            <column name="total_matches" value="3"/>
+            <column name="won_matches" value="1"/>
+            <column name="points" value="14"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="prefill_matches_players" author="a.andreychuk@andersenlab.com" context="test">
+        <insert tableName="matches_players">
+            <column name="match_id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="player_id" value="7d4a769a-9976-4e69-a2c5-50e3c20085f1"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="player_id" value="cba1a328-7ab0-4724-9903-8b65b15c72d3"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="player_id" value="f84b1f9f-9298-492a-8b16-f3ed271efe9c"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="player_id" value="e216a701-cafe-4497-8f36-275247102b1c"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="da7540aa-50a0-41bb-bd74-a39b1ee88704"/>
+            <column name="player_id" value="d8eead27-ac5c-45e4-a9d4-12d1ef323cd6"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="da7540aa-50a0-41bb-bd74-a39b1ee88704"/>
+            <column name="player_id" value="63bc807c-96ad-4d65-aae5-a657663afa14"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="3e11f4a1-1405-4a90-9ce6-f600b1f459ca"/>
+            <column name="player_id" value="d8eead27-ac5c-45e4-a9d4-12d1ef323cd6"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="3e11f4a1-1405-4a90-9ce6-f600b1f459ca"/>
+            <column name="player_id" value="63bc807c-96ad-4d65-aae5-a657663afa14"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="1d7d7fff-d0da-46e8-a617-20bf4888e640"/>
+            <column name="player_id" value="63bc807c-96ad-4d65-aae5-a657663afa14"/>
+        </insert>
+        <insert tableName="matches_players">
+            <column name="match_id" value="1d7d7fff-d0da-46e8-a617-20bf4888e640"/>
+            <column name="player_id" value="d8eead27-ac5c-45e4-a9d4-12d1ef323cd6"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="prefill_matches_winners" author="a.andreychuk@andersenlab.com" context="test">
+        <insert tableName="matches_winners">
+            <column name="match_id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="winner_id" value="7d4a769a-9976-4e69-a2c5-50e3c20085f1"/>
+            <column name="points" value="10"/>
+        </insert>
+        <insert tableName="matches_winners">
+            <column name="match_id" value="77943483-a2fc-4a24-8eea-a51d994b6bd3"/>
+            <column name="winner_id" value="e216a701-cafe-4497-8f36-275247102b1c"/>
+            <column name="points" value="7"/>
+        </insert>
+        <insert tableName="matches_winners">
+            <column name="match_id" value="da7540aa-50a0-41bb-bd74-a39b1ee88704"/>
+            <column name="winner_id" value="d8eead27-ac5c-45e4-a9d4-12d1ef323cd6"/>
+            <column name="points" value="14"/>
+        </insert>
+        <insert tableName="matches_winners">
+            <column name="match_id" value="3e11f4a1-1405-4a90-9ce6-f600b1f459ca"/>
+            <column name="winner_id" value="63bc807c-96ad-4d65-aae5-a657663afa14"/>
+            <column name="points" value="12"/>
+        </insert>
+        <insert tableName="matches_winners">
+            <column name="match_id" value="1d7d7fff-d0da-46e8-a617-20bf4888e640"/>
+            <column name="winner_id" value="63bc807c-96ad-4d65-aae5-a657663afa14"/>
+            <column name="points" value="8"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

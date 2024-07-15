@@ -16,8 +16,6 @@ public interface PlayerService {
 
     void increaseStatsForWinners(Match match);
 
-    Set<Player> extractWinners(Match match, Set<Player> participants);
-
     int getLongestWinStreak(Player player);
 
     PlayerStats getStats(String nick);

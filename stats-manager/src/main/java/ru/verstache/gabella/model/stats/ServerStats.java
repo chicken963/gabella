@@ -15,7 +15,7 @@ public class ServerStats {
     private LocalDateTime lastPlayedAt;
     private int totalPlayedMatches;
     private double averageMatchesPerDay;
-    private double maxMatchesPerDay;
+    private int maxMatchesPerDay;
     private LocalDate mostPlayedDay;
     private PlayerDto bestPlayer;
 }

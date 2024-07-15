@@ -7,17 +7,16 @@ import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.Server;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 public interface MatchRepository extends JpaRepository<Match, UUID> {
 
-    Collection<Match> findAllByServerAndStartedAtAndFinishedAt(Server server, LocalDateTime startedAt, LocalDateTime finishedAt);
+    List<Match> findAllByServerAndStartedAtAndFinishedAt(Server server, LocalDateTime startedAt, LocalDateTime finishedAt);
 
     Integer countMatchByServer(Server server);
 
-    Collection<Match> findAllByServer(Server server);
+    List<Match> findAllByServer(Server server);
 
     @Query("SELECT m FROM Match m ORDER BY m.finishedAt DESC")
     List<Match> findLastFinished(Pageable pageable);

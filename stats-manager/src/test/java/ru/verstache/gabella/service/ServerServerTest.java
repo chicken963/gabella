@@ -3,6 +3,7 @@ package ru.verstache.gabella.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import ru.verstache.gabella.PostgresTestContainerInitializer;
 import ru.verstache.gabella.dto.PlayerDto;
 import ru.verstache.gabella.dto.ServerDto;
@@ -12,6 +13,7 @@ import ru.verstache.gabella.model.stats.ServerStats;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +21,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class ServerServerTest extends PostgresTestContainerInitializer {
 
     @Autowired
     private ServerService uut;
+
+    @Test
+    void shouldFindAll() {
+        Set<ServerDto> all = uut.findAll();
+        assertThat(all).hasSize(3);
+    }
+
+    @Test
+    void shouldFindById() {
+        UUID id = UUID.fromString("387fad9a-f121-8a3c-7cbb-17bcfd2391d6");
+        ServerDto server = uut.findById(id);
+        assertThat(server.name()).isEqualTo("rush_c");
+    }
 
     @Test
     void shouldFindMostPopularServer() {

@@ -3,6 +3,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="db/changelog/V1_0__initial_schema.xml"/>
-    <include file="db/changelog/V1_1_add_points_for_win.xml"/>
+    <include file="db/changelog/db.changelog-master.xml"/>
+    <include file="db/changelog/db.prefill_tables.xml"/>
 </databaseChangeLog>

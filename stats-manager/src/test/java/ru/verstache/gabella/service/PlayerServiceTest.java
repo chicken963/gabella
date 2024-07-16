@@ -33,7 +33,7 @@ import static utils.PlayerUtils.generateNewPlayer;
 
 @Slf4j
 @ExtendWith(SpringExtension.class)
-public class PlayServiceTest {
+public class PlayerServiceTest {
 
     @Mock
     private PlayerRepository playerRepository;

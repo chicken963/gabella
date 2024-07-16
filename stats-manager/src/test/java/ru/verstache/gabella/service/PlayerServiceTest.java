@@ -9,13 +9,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ru.verstache.gabella.IntArrayConverter;
 import ru.verstache.gabella.mapper.PlayerMapper;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
 import ru.verstache.gabella.model.Player;
 import ru.verstache.gabella.repository.PlayerRepository;
 import ru.verstache.gabella.service.impl.PlayerServiceImpl;
-import ru.verstache.gabella.IntArrayConverter;
 import utils.PlayerUtils;
 
 import java.time.LocalDateTime;
@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static utils.PlayerUtils.generateNewPlayer;

@@ -13,7 +13,7 @@ public interface ServerService {
 
     Set<ServerDto> findAll();
 
-    ServerStats getServersStats(UUID serverId);
+    ServerStats getServerStats(UUID serverId);
 
     ServerDto findById(UUID serverId);
 

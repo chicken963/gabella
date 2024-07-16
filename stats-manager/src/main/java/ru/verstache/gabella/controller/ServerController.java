@@ -10,7 +10,6 @@ import ru.verstache.gabella.dto.ServerDto;
 import ru.verstache.gabella.model.stats.ServerStats;
 import ru.verstache.gabella.service.ServerService;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,7 +27,7 @@ public class ServerController {
 
     @GetMapping("/{id}/stats")
     public ResponseEntity<ServerStats> getServerStats(@PathVariable("id") UUID serverId) {
-        return ResponseEntity.ok(serverService.getServersStats(serverId));
+        return ResponseEntity.ok(serverService.getServerStats(serverId));
     }
 
     @GetMapping("/{id}/info")

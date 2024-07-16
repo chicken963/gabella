@@ -47,7 +47,7 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public ServerStats getServersStats(UUID serverId) {
+    public ServerStats getServerStats(UUID serverId) {
         Server server = serverRepository.findById(serverId)
                 .orElseThrow(() -> new ItemNotFoundException("No server found by id " + serverId));
         return ServerStats.builder()

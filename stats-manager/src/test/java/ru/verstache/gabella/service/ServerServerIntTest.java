@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import ru.verstache.gabella.PostgresTestContainerInitializer;
 import ru.verstache.gabella.dto.PlayerDto;
 import ru.verstache.gabella.dto.ServerDto;
@@ -22,27 +23,28 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ServerServerTest extends PostgresTestContainerInitializer {
+@ContextConfiguration(initializers = PostgresTestContainerInitializer.class)
+public class ServerServerIntTest {
 
     @Autowired
-    private ServerService uut;
+    private ServerService sut;
 
     @Test
     void shouldFindAll() {
-        Set<ServerDto> all = uut.findAll();
+        Set<ServerDto> all = sut.findAll();
         assertThat(all).hasSize(3);
     }
 
     @Test
     void shouldFindById() {
         UUID id = UUID.fromString("387fad9a-f121-8a3c-7cbb-17bcfd2391d6");
-        ServerDto server = uut.findById(id);
+        ServerDto server = sut.findById(id);
         assertThat(server.name()).isEqualTo("rush_c");
     }
 
     @Test
     void shouldFindMostPopularServer() {
-        List<ServerDto> mostPopularServers = uut.findMostPopularServers(2);
+        List<ServerDto> mostPopularServers = sut.findMostPopularServers(2);
 
         assertThat(mostPopularServers).hasSize(2);
         assertThat(mostPopularServers.get(0).name()).isEqualTo("rush_b");
@@ -52,7 +54,7 @@ public class ServerServerTest extends PostgresTestContainerInitializer {
     @Test
     void shouldGenerateNewServer_whenNameNotExistsYet() {
         final String nonExistingName = "non_existing_name";
-        Server server = uut.findByName(nonExistingName);
+        Server server = sut.findByName(nonExistingName);
         assertNotNull(server.getId());
         assertThat(server.getName()).isEqualTo(nonExistingName);
     }
@@ -60,7 +62,7 @@ public class ServerServerTest extends PostgresTestContainerInitializer {
     @Test
     void shouldPrepareServerStats() {
         final UUID serverId = UUID.fromString("db7b1d54-ff13-48d0-b6c7-06ba5507a305");
-        ServerStats serversStats = uut.getServersStats(serverId);
+        ServerStats serversStats = sut.getServerStats(serverId);
         ServerStats expectedStats = ServerStats.builder()
                 .name("rush_b")
                 .createdAt(LocalDateTime.of(2024, 6, 28, 19, 46, 33, 514582000))

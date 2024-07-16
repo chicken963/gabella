@@ -1,24 +1,26 @@
 package ru.verstache.gabella;
 
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.MutablePropertySources;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-public class PostgresTestContainerInitializer {
+import java.util.HashMap;
+import java.util.Map;
 
-    @Container
-    static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:15")
-            .withDatabaseName("db-test")
-            .withUsername("admin")
-            .withPassword("password");
+public class PostgresTestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    @DynamicPropertySource
-    static void initialize(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        PostgreSQLContainer<?> postgresContainer = PostgresTestContainer.getInstance();
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("spring.datasource.url", postgresContainer.getJdbcUrl());
+        properties.put("spring.datasource.username", postgresContainer.getUsername());
+        properties.put("spring.datasource.password", postgresContainer.getPassword());
+
+        MutablePropertySources propertySources = applicationContext.getEnvironment().getPropertySources();
+        propertySources.addFirst(new MapPropertySource("testcontainers", properties));
     }
 }

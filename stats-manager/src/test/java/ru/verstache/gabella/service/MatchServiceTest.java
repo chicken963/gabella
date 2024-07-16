@@ -10,10 +10,12 @@ import ru.verstache.gabella.dto.MatchDto;
 import ru.verstache.gabella.mapper.MatchMapper;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
+import ru.verstache.gabella.model.Server;
 import ru.verstache.gabella.repository.MatchRepository;
 import ru.verstache.gabella.repository.MatchWinnerRepository;
 import ru.verstache.gabella.service.impl.MatchServiceImpl;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -48,12 +50,29 @@ public class MatchServiceTest {
         Mockito.verify(matchWinnerRepository, times(2)).save(any());
     }
 
+    @Test
+    public void shouldNotSaveMatch_whenDuplicate() {
+        Match match = mockMatch();
+        when(matchMapper.toModel(any())).thenReturn(match);
+        when(matchRepository.findAllByServerAndStartedAtAndFinishedAt(any(), any(), any()))
+                .thenReturn(List.of(new Match()));
+        MatchDto matchDto = Mockito.mock(MatchDto.class);
+
+        uut.saveResult(matchDto);
+
+        Mockito.verify(playerService, times(0)).increaseStatsForParticipants(any());
+        Mockito.verify(playerService, times(0)).increaseStatsForWinners(any());
+        Mockito.verify(matchRepository, times(0)).save(any());
+        Mockito.verify(matchWinnerRepository, times(0)).save(any());
+    }
+
     private Match mockMatch() {
         Match match = Mockito.mock(Match.class);
         when(match.getMatchWinners()).thenReturn(Set.of(
                 mock(MatchWinner.class),
                 mock(MatchWinner.class)
         ));
+        when(match.getServer()).thenReturn(mock(Server.class));
         return match;
     }
 

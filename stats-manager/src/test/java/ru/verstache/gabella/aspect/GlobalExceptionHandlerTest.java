@@ -1,5 +1,6 @@
 package ru.verstache.gabella.aspect;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,12 +19,14 @@ public class GlobalExceptionHandlerTest {
     private GlobalExceptionHandler uut;
 
     @Test
+    @DisplayName("Should intercept ItemNotFoundException")
     void shouldHandleItemNotFoundException() {
         ResponseEntity<String> itemNotFound = uut.handleException(new ItemNotFoundException("Item not found"));
         assertThat(itemNotFound.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
+    @DisplayName("Should handle negative values for report list size")
     void shouldHandleInvalidAmountException() {
         ResponseEntity<String> itemNotFound = uut.handleInvalidAmountException(new ReportListSizeException("Wrong path variable value"));
         assertThat(itemNotFound.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);

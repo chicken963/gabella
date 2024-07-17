@@ -1,6 +1,7 @@
 package ru.verstache.gabella.mapper;
 
 import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +32,7 @@ public class MatchMapperTest {
     private MatchMapper sut;
 
     @Test
+    @DisplayName("Should correctly map match dto to model (including server and player mapping)")
     void shouldMapToModel() {
         MatchDto matchDto = new MatchDto(
             new ServerDto(UUID.fromString("78de6864-36e9-4563-88e5-a7fef2e07cec"),

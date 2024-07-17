@@ -3,12 +3,16 @@ package ru.verstache.gabella.mapper;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.verstache.gabella.dto.MatchDto;
+import ru.verstache.gabella.dto.PlayerDto;
+import ru.verstache.gabella.dto.WinnerDto;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
 import ru.verstache.gabella.model.MatchWinnerId;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static utils.FilterUtils.distinctByKey;
 
 @Mapper(componentModel = "spring")
 public abstract class MatchMapper {
@@ -25,19 +29,22 @@ public abstract class MatchMapper {
 
     public Match toModel(MatchDto matchDto) {
         Match match = Match.builder()
-                .id(UUID.randomUUID())
-                .startedAt(matchDto.startedAt())
-                .finishedAt(matchDto.finishedAt())
-                .server(serverMapper.toModel(matchDto.server()))
-                .participants(matchDto.participants().stream()
-                        .map(playerMapper::toModel)
-                        .collect(Collectors.toSet()))
-                .build();
-        match.setMatchWinners(matchDto.winners().stream().map(winner -> {
-            MatchWinner matchWinner = new MatchWinner();
-            matchWinner.setMatch(match);
-            matchWinner.setPoints(winner.points());
-            matchWinner.setWinner(match.getParticipants().stream()
+            .id(UUID.randomUUID())
+            .startedAt(matchDto.startedAt())
+            .finishedAt(matchDto.finishedAt())
+            .server(serverMapper.toModel(matchDto.server()))
+            .participants(matchDto.participants().stream()
+                .filter(distinctByKey(PlayerDto::nick))
+                .map(playerMapper::toModel)
+                .collect(Collectors.toSet()))
+            .build();
+        match.setMatchWinners(matchDto.winners().stream()
+            .filter(distinctByKey(WinnerDto::nick))
+            .map(winner -> {
+                MatchWinner matchWinner = new MatchWinner();
+                matchWinner.setMatch(match);
+                matchWinner.setPoints(winner.points());
+                matchWinner.setWinner(match.getParticipants().stream()
                     .filter(pl -> pl.getNick().equals(winner.nick()))
                     .findFirst()
                     .orElse(null));

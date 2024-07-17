@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.verstache.gabella.dto.PlayerDto;
+import ru.verstache.gabella.exception.ItemNotFoundException;
 import ru.verstache.gabella.mapper.PlayerMapper;
 import ru.verstache.gabella.model.Match;
 import ru.verstache.gabella.model.MatchWinner;
@@ -94,7 +95,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public PlayerStats getStats(String nick) {
-        Player player = findPlayerByNick(nick);
+        Player player = playerRepository.findByNick(nick)
+                .orElseThrow(() -> new ItemNotFoundException(String.format("There is no player with nick '%s'", nick)));
         return PlayerStats.builder()
                 .nick(nick)
                 .registeredAt(player.getRegisteredAt())

@@ -1,5 +1,6 @@
 package ru.verstache.gabella.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,18 +27,21 @@ public class ReportController {
     private final ServerService serverService;
 
     @ValidReportListSize
+    @Operation(summary = "Get info about last n finished matches")
     @GetMapping("/recent-matches/{amount}")
     public ResponseEntity<List<MatchDto>> getLastMatches(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(matchService.findLastMatches(amount));
     }
 
     @ValidReportListSize
+    @Operation(summary = "Get info about top n players")
     @GetMapping("/best-players/{amount}")
     public ResponseEntity<List<PlayerDto>> getTopPlayers(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(playerService.findTopPlayers(amount));
     }
 
     @ValidReportListSize
+    @Operation(summary = "Get info about top n popular servers")
     @GetMapping("/popular-servers/{amount}")
     public ResponseEntity<List<ServerDto>> getMostPopularServers(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(serverService.findMostPopularServers(amount));

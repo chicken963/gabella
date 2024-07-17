@@ -15,7 +15,9 @@ public interface ServerService {
 
     ServerStats getServerStats(UUID serverId);
 
-    ServerDto findById(UUID serverId);
+    ServerDto findDtoById(UUID serverId);
+
+    Server findById(UUID serverId);
 
     List<ServerDto> findMostPopularServers(Integer amount);
 }

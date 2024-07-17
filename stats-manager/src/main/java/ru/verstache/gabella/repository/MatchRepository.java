@@ -18,6 +18,8 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
 
     List<Match> findAllByServer(Server server);
 
+    List<Match> findAllByServerAndFinishedAtBetween(Server server, LocalDateTime dayStart, LocalDateTime dayEnd);
+
     @Query("SELECT m FROM Match m ORDER BY m.finishedAt DESC")
     List<Match> findLastFinished(Pageable pageable);
 

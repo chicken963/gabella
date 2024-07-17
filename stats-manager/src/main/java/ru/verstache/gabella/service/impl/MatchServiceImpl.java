@@ -8,15 +8,17 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.verstache.gabella.dto.MatchDto;
 import ru.verstache.gabella.mapper.MatchMapper;
 import ru.verstache.gabella.model.Match;
-import ru.verstache.gabella.model.MatchWinner;
-import ru.verstache.gabella.model.Player;
 import ru.verstache.gabella.repository.MatchRepository;
 import ru.verstache.gabella.repository.MatchWinnerRepository;
 import ru.verstache.gabella.service.MatchService;
 import ru.verstache.gabella.service.PlayerService;
+import ru.verstache.gabella.service.ServerService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,6 +30,7 @@ public class MatchServiceImpl implements MatchService {
     private final MatchWinnerRepository matchWinnerRepository;
     private final MatchMapper matchMapper;
     private final PlayerService playerService;
+    private final ServerService serverService;
 
     @Override
     public void saveResult(MatchDto matchDto) {
@@ -57,6 +60,17 @@ public class MatchServiceImpl implements MatchService {
     public List<MatchDto> findLastMatches(Integer amount) {
         PageRequest pageRequest = PageRequest.of(0, amount);
         return matchRepository.findLastFinished(pageRequest).stream()
+                .map(matchMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MatchDto> findByServerIdAndDate(UUID serverId, LocalDate date) {
+        return matchRepository.findAllByServerAndFinishedAtBetween(
+                        serverService.findById(serverId),
+                        LocalDateTime.of(date, LocalTime.MIDNIGHT),
+                        LocalDateTime.of(date.plusDays(1L), LocalTime.MIDNIGHT))
+                .stream()
                 .map(matchMapper::toDto)
                 .collect(Collectors.toList());
     }

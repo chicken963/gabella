@@ -38,7 +38,7 @@ public class ServerServerIntTest {
     @Test
     void shouldFindById() {
         UUID id = UUID.fromString("387fad9a-f121-8a3c-7cbb-17bcfd2391d6");
-        ServerDto server = sut.findById(id);
+        ServerDto server = sut.findDtoById(id);
         assertThat(server.name()).isEqualTo("rush_c");
     }
 

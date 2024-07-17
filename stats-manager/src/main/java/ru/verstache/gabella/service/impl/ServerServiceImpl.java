@@ -70,9 +70,15 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public ServerDto findById(UUID serverId) {
+    public ServerDto findDtoById(UUID serverId) {
         return serverRepository.findById(serverId)
                 .map(serverMapper::toDto)
+                .orElseThrow(() -> new ItemNotFoundException("No server found by id " + serverId));
+    }
+
+    @Override
+    public Server findById(UUID serverId) {
+        return serverRepository.findById(serverId)
                 .orElseThrow(() -> new ItemNotFoundException("No server found by id " + serverId));
     }
 
